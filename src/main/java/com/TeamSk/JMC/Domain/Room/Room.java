@@ -35,8 +35,4 @@ public class Room {
 
     @Column
     private List<Restaurant> recentList;
-
-
-
-
 }

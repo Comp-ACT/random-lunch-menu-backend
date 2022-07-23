@@ -22,7 +22,4 @@ public class Restaurant {
 
     @Column
     private double weight;
-
-
-
 }

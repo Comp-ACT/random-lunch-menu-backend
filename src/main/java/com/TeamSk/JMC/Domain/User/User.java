@@ -26,7 +26,6 @@ public class User {
     @Column
     private List<Long> roomId;
 
-
     @Builder
     public User(String email, String name, List<Long> roomId)
     {
@@ -34,11 +33,4 @@ public class User {
         this.name = name;
         this.roomId = roomId;
     }
-
-
-
-
-
-
-
 }
