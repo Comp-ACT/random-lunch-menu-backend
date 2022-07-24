@@ -20,6 +20,7 @@ public class Room {
     @Column(nullable = false)
     private String name;
 
+    //ToDo Entity에서 List 처리 어떻게 하는지 습득후 수정
 //    @Column
 //    private User leader;
 
