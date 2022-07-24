@@ -4,41 +4,30 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.List;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class User {
-
+public class Users {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
-    private List<Long> roomId;
-
+//    @Column
+//    private List<Long> roomId;
 
     @Builder
-    public User(String email, String name, List<Long> roomId)
+    public Users(String email, String name)
     {
         this.email = email;
         this.name = name;
-        this.roomId = roomId;
+        //this.roomId = roomId;
     }
-
-
-
-
-
-
-
 }

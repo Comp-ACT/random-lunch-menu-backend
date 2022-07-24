@@ -1,28 +1,33 @@
 package com.TeamSk.JMC.Domain.Restaurant;
 
-import com.TeamSk.JMC.Domain.User.User;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.util.List;
+import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor
+@Entity
 public class Restaurant {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
-    private List<User> negativeUserList;
+//    @Column
+//    private List<User> negativeUserList;
+//
+//    @Column
+//    private List<User> positiveUserList;
 
-    @Column
-    private List<User> positiveUserList;
+    @Builder
+    public Restaurant(String name)
+    {
+        this.name = name;
 
-    @Column
-    private double weight;
-
-
-
+    }
 }
