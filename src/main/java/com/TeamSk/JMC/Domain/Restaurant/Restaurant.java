@@ -1,28 +1,33 @@
 package com.TeamSk.JMC.Domain.Restaurant;
 
-import com.TeamSk.JMC.Domain.User.User;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.util.List;
+import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor
+@Entity
 public class Restaurant {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
-    private List<User> negativeUserList;
+    //ToDo Entity에서 List 처리 어떻게 하는지 습득후 수정
+//    @Column
+//    private List<User> negativeUserList;
+//
+//    @Column
+//    private List<User> positiveUserList;
 
-    @Column
-    private List<User> positiveUserList;
-
-    @Column
-    private double weight;
-
-
-
+    @Builder
+    public Restaurant(String name)
+    {
+        this.name = name;
+    }
 }
