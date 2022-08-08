@@ -1,42 +1,28 @@
 package com.TeamSk.JMC.Domain.Room;
 
+import com.TeamSk.JMC.Domain.RecentRestaurant.RecentRestaurant;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
+    @Column(name = "ROOM_ID")
     private Long id;
 
-    @Column(nullable = false)
-    private int password;
-
-    @Column(nullable = false)
     private String name;
 
-    //ToDo Entity에서 List 처리 어떻게 하는지 습득후 수정
-//    @Column
-//    private User leader;
+    private String password;
 
-//    @Column
-//    private List<User> member;
-//
-//    @Column
-//    private List<Restaurant> restaurantList;
-//
-//    @Column
-//    private List<Restaurant> recentList;
+    private String leaderName;
 
-    @Builder
-    public Room(int password, String name)
-    {
-        this.password = password;
-        this.name =name;
-    }
+    @OneToMany(mappedBy = "room")
+    private List<RecentRestaurant> recentRestaurants;
 }

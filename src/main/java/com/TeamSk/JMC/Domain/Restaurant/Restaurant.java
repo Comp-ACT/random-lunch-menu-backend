@@ -12,22 +12,9 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
+    @Column(name = "RESTAURANT_ID")
     private Long id;
 
-    @Column(nullable = false)
     private String name;
-
-    //ToDo Entity에서 List 처리 어떻게 하는지 습득후 수정
-//    @Column
-//    private List<User> negativeUserList;
-//
-//    @Column
-//    private List<User> positiveUserList;
-
-    @Builder
-    public Restaurant(String name)
-    {
-        this.name = name;
-    }
 }
