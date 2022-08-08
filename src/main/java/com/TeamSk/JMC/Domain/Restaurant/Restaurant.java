@@ -16,5 +16,5 @@ public class Restaurant {
     @Column(name = "RESTAURANT_ID")
     private Long id;
 
-    private String Name;
+    private String name;
 }
