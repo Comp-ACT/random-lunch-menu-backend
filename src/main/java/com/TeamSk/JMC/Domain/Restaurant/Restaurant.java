@@ -11,10 +11,9 @@ import javax.persistence.*;
 @Entity
 public class Restaurant {
 
-
     @Id
     @GeneratedValue
-    @Column
+    @Column(name = "RESTAURANT_ID")
     private Long id;
 
     private String Name;

@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Room {
-
     @Id
     @GeneratedValue
     @Column(name = "ROOM_ID")
@@ -22,8 +21,8 @@ public class Room {
 
     private String password;
 
-    private String LeaderName;
+    private String leaderName;
 
     @OneToMany(mappedBy = "room")
-    private List<RecentRestaurant> recentRoomList;
+    private List<RecentRestaurant> recentRestaurants;
 }

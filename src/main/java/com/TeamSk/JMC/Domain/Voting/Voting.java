@@ -20,7 +20,7 @@ public class Voting
     @JoinColumn(name = "RESTAURANT_ID")
     private Restaurant restaurant;
 
-    private Long USER_ID;
+    private Long userId;
 
-    private boolean agree_flag;
+    private boolean agreeFlag;
 }

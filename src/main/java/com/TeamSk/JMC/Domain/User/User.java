@@ -20,7 +20,7 @@ public class User {
     private String name;
 
     @Builder
-    User(String age, String name)
+    User(String name)
     {
         this.name = name;
     }
