@@ -16,7 +16,6 @@ public class Voting
     @Column(name = "VOTING_ID")
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "RESTAURANT_ID")
     private Restaurant restaurant;
