@@ -23,5 +23,4 @@ public class RecentRestaurant {
     private Room room;
 
     private LocalDateTime votingDate;
-
 }

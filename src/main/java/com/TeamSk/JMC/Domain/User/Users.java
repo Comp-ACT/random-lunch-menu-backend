@@ -1,16 +1,17 @@
 package com.TeamSk.JMC.Domain.User;
 
+import com.TeamSk.JMC.Domain.RoomUser.RoomUser;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue
@@ -19,11 +20,12 @@ public class User {
 
     private String name;
 
+    @OneToMany(mappedBy = "user")
+    private List<RoomUser> roomUsers;
+
     @Builder
-    User(String name)
+    Users(String name)
     {
         this.name = name;
     }
-
-
 }
