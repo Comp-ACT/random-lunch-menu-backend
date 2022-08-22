@@ -20,12 +20,17 @@ public class Users {
 
     private String name;
 
+    private String email;
+
     @OneToMany(mappedBy = "user")
     private List<RoomUser> roomUsers;
 
     @Builder
-    Users(String name)
+    Users(String name, String email)
     {
         this.name = name;
+        this.email = email;
     }
+
+
 }

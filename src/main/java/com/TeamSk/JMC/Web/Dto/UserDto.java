@@ -9,18 +9,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDto {
 
-    private Long id;
     private String name;
+    private String email;
 
     public UserDto(Users entity)
     {
-        this.id = entity.getId();
         this.name = entity.getName();
+        this.email = entity.getEmail();
     }
 
     public Users toEntity() {
         return Users.builder()
                 .name(name)
+                .email(email)
                 .build();
     }
 }

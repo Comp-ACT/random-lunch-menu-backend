@@ -14,13 +14,5 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @PostMapping("/login")
-    public String login(@RequestBody UserDto userDto)
-    {
-        if(loginService.login(userDto))
-        {
-            return "redirect:/";
-        }
-        return "login";
-    }
+
 }
