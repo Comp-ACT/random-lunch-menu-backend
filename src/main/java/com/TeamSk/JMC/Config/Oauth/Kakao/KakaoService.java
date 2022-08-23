@@ -1,7 +1,6 @@
 package com.TeamSk.JMC.Config.Oauth.Kakao;
 
-import com.TeamSk.JMC.Domain.User.UserRepository;
-import com.TeamSk.JMC.Domain.User.Users;
+import com.TeamSk.JMC.Domain.User.Member;
 import com.TeamSk.JMC.Service.Login.LoginService;
 import com.TeamSk.JMC.Web.Dto.UserDto;
 import com.google.gson.JsonObject;
@@ -64,6 +63,7 @@ public class KakaoService {
 
             }
 
+
             System.out.println("access_token : " + accessToken);
             System.out.println("refresh_token : " + refreshToken);
 
@@ -120,7 +120,7 @@ public class KakaoService {
             System.out.println("email : " + email);
             System.out.println("nickname = " + nickname);
 
-            Users user = Users.builder()
+            Member user = Member.builder()
                     .name(nickname)
                     .email(email)
                     .build();

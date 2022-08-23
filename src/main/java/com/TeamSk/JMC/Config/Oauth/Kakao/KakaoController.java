@@ -1,7 +1,6 @@
 package com.TeamSk.JMC.Config.Oauth.Kakao;
 
 import java.io.IOException;
-
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import com.TeamSk.JMC.Config.Oauth.Kakao.KakaoService;
 @RequiredArgsConstructor
 @RequestMapping(value="/kakao")
 public class KakaoController {
-
     private final KakaoService ks;
-
     @ResponseBody
     @GetMapping("/login")
     public void kakaoCallback(@RequestParam String code) {

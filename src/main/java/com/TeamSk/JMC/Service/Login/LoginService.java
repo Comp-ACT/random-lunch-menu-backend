@@ -1,7 +1,7 @@
 package com.TeamSk.JMC.Service.Login;
 
-import com.TeamSk.JMC.Domain.User.Users;
-import com.TeamSk.JMC.Domain.User.UserRepository;
+import com.TeamSk.JMC.Domain.User.Member;
+import com.TeamSk.JMC.Domain.User.MemberRepository;
 import com.TeamSk.JMC.Web.Dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.h2.engine.User;
@@ -13,12 +13,13 @@ import java.util.Optional;
 @Service
 public class LoginService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository userRepository;
 
-    public boolean login(Users user)
+    public boolean login(Member member)
     {
 
-        userRepository.save(user);
+
+        userRepository.save(member);
 
 
         return true;

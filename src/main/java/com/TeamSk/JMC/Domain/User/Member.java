@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Users {
+public class Member {
 
     @Id
     @GeneratedValue
@@ -26,7 +26,7 @@ public class Users {
     private List<RoomUser> roomUsers;
 
     @Builder
-    Users(String name, String email)
+    Member(String name, String email)
     {
         this.name = name;
         this.email = email;
