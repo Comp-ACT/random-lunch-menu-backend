@@ -2,22 +2,16 @@ package com.TeamSk.JMC.Config.Oauth.Kakao;
 
 import com.TeamSk.JMC.Domain.User.Member;
 import com.TeamSk.JMC.Service.Login.LoginService;
-import com.TeamSk.JMC.Web.Dto.UserDto;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
-import org.h2.engine.User;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
