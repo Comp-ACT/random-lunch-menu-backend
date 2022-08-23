@@ -1,7 +1,8 @@
 package com.TeamSk.JMC.Domain.RoomUser;
 
 import com.TeamSk.JMC.Domain.Room.Room;
-import com.TeamSk.JMC.Domain.User.Users;
+import com.TeamSk.JMC.Domain.Member.Member;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,8 +18,8 @@ public class RoomUser {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private Users user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID")
