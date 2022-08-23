@@ -1,6 +1,6 @@
 package com.TeamSk.JMC.Web.Dto;
 
-import com.TeamSk.JMC.Domain.User.Member;
+import com.TeamSk.JMC.Domain.Member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

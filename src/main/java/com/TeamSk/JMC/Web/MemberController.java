@@ -1,6 +1,6 @@
 package com.TeamSk.JMC.Web;
 
-import com.TeamSk.JMC.Service.Mebmer.MemberService;
+import com.TeamSk.JMC.Service.Member.MemberService;
 import com.TeamSk.JMC.Web.Dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

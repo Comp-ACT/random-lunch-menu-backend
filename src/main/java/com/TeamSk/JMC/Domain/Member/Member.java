@@ -1,4 +1,4 @@
-package com.TeamSk.JMC.Domain.User;
+package com.TeamSk.JMC.Domain.Member;
 
 import com.TeamSk.JMC.Domain.RoomUser.RoomUser;
 import lombok.Builder;

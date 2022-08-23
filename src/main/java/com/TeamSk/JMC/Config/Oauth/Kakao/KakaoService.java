@@ -1,6 +1,6 @@
 package com.TeamSk.JMC.Config.Oauth.Kakao;
 
-import com.TeamSk.JMC.Domain.User.Member;
+import com.TeamSk.JMC.Domain.Member.Member;
 import com.TeamSk.JMC.Service.Login.LoginService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
