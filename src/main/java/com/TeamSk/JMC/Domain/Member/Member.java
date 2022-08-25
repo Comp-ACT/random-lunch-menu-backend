@@ -1,4 +1,4 @@
-package com.TeamSk.JMC.Domain.User;
+package com.TeamSk.JMC.Domain.Member;
 
 import com.TeamSk.JMC.Domain.RoomUser.RoomUser;
 import lombok.Builder;
@@ -11,21 +11,24 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Users {
+public class Member {
 
     @Id
     @GeneratedValue
-    @Column(name = "USER_ID")
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "user")
+    private String email;
+
+    @OneToMany(mappedBy = "member")
     private List<RoomUser> roomUsers;
 
     @Builder
-    Users(String name)
+    Member(String name, String email)
     {
         this.name = name;
+        this.email = email;
     }
 }

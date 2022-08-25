@@ -6,20 +6,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserDto {
+public class MemberDto {
 
-    private Long id;
     private String name;
+    private String email;
 
-    public UserDto(Member entity)
+    public MemberDto(Member entity)
     {
-        this.id = entity.getId();
         this.name = entity.getName();
+        this.email = entity.getEmail();
     }
 
     public Member toEntity() {
         return Member.builder()
                 .name(name)
+                .email(email)
                 .build();
     }
 }
