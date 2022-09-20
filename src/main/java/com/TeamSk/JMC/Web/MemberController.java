@@ -1,7 +1,7 @@
 package com.TeamSk.JMC.Web;
 
 import com.TeamSk.JMC.Service.Member.MemberService;
-import com.TeamSk.JMC.Web.Dto.MemberDto.MemberDto;
+import com.TeamSk.JMC.Web.Dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +13,7 @@ public class MemberController {
     @GetMapping("/users/{userId}")
     public MemberDto findById(@PathVariable Long userId)
     {
+
         return usersService.findById(userId);
     }
-
-
 }

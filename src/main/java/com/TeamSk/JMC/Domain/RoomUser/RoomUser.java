@@ -1,9 +1,8 @@
-package com.TeamSk.JMC.Domain.RoomMember;
+package com.TeamSk.JMC.Domain.RoomUser;
 
 import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Member.Member;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,11 +11,10 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class RoomMember {
+public class RoomUser {
 
     @Id
-    @GeneratedValue
-    @Column(name = "ROOM_MEMBER_ID")
+    @Column(name = "ROOM_USER_ID")
     private Long id;
 
     @ManyToOne
@@ -26,10 +24,4 @@ public class RoomMember {
     @ManyToOne
     @JoinColumn(name = "ROOM_ID")
     private Room room;
-
-    @Builder
-    public RoomMember(Member member, Room room) {
-        this.member = member;
-        this.room = room;
-    }
 }

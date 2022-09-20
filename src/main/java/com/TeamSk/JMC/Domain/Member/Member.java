@@ -1,6 +1,6 @@
 package com.TeamSk.JMC.Domain.Member;
 
-import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
+import com.TeamSk.JMC.Domain.RoomUser.RoomUser;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,16 +22,13 @@ public class Member {
 
     private String email;
 
-    private String profileImageURL;
-
     @OneToMany(mappedBy = "member")
-    private List<RoomMember> roomUsers;
+    private List<RoomUser> roomUsers;
 
     @Builder
-    public Member(String name, String email, String profileImageURL)
+    Member(String name, String email)
     {
         this.name = name;
         this.email = email;
-        this.profileImageURL = profileImageURL;
     }
 }
