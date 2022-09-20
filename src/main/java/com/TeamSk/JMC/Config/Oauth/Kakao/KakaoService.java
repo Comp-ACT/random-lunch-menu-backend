@@ -36,7 +36,7 @@ public class KakaoService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=450bbd68a5b2bcb5e9e238e18525798a"); // TODO REST_API_KEY 입력
+            sb.append("&client_id=7ef2e03ad8fa35a0bb154e58e9d393d7"); // TODO REST_API_KEY 입력
             sb.append("&redirect_uri=http://localhost:8080/kakao/login"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
@@ -95,7 +95,6 @@ public class KakaoService {
             String email = "";
             Long id = 0L;
             String nickname = "";
-            String profileImageURL = "";
             while(jsonReader.peek() != JsonToken.END_DOCUMENT)
             {
                 JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
@@ -109,20 +108,18 @@ public class KakaoService {
                 }
                 //지금은 동의 안받고 출력 나중에 동의 받았는지 아닌지 확인 후 출력해야함
                 nickname = jsonObject.get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
-                profileImageURL = jsonObject.get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("thumbnail_image_url").getAsString();
             }
 
             System.out.println("id : " + id);
             System.out.println("email : " + email);
             System.out.println("nickname = " + nickname);
-            System.out.println("profileImageURL = " + profileImageURL);
-            Member member = Member.builder()
+
+            Member user = Member.builder()
                     .name(nickname)
                     .email(email)
-                    .profileImageURL(profileImageURL)
                     .build();
 
-            loginService.login(member);
+            loginService.login(user);
 
         } catch (IOException e) {
             e.printStackTrace();
