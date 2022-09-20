@@ -2,7 +2,7 @@ package com.TeamSk.JMC.Service.Member;
 
 import com.TeamSk.JMC.Domain.Member.Member;
 import com.TeamSk.JMC.Domain.Member.MemberRepository;
-import com.TeamSk.JMC.Web.Dto.MemberDto;
+import com.TeamSk.JMC.Web.Dto.MemberDto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
