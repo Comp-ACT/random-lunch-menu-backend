@@ -23,7 +23,6 @@ public class RoomController {
     {
 
     }
-
     @PostMapping("/rooms/join")
     public boolean joinRoom(@RequestBody RoomJoinDto roomJoinDto)
     {
