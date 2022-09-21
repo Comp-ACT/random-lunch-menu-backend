@@ -120,7 +120,6 @@ public class KakaoService {
                     .build();
 
             loginService.login(user);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
