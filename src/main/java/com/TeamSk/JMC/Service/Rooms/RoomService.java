@@ -7,7 +7,7 @@ import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
-import com.TeamSk.JMC.Web.Dto.MemberDto.MemberDto;
+import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
@@ -16,9 +16,7 @@ import com.TeamSk.JMC.Web.Dto.roomDto.RoomResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -55,14 +53,12 @@ public class RoomService {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         if(roomOptional.isPresent())
         {
-            System.out.println("=======================");
             Room room = roomOptional.get();
             String name = room.getName();
             Long leaderId = room.getLeaderId();
             String password = room.getPassword();
             List<RestaurantResponseDto> restaurantList = getRestaurantList(roomId);
             List<MemberResponseDto> memberList = getMemberList(roomId);
-            System.out.println("=======================");
             return RoomResponseDto.builder()
                     .name(name)
                     .leaderId(leaderId)
@@ -98,6 +94,36 @@ public class RoomService {
         return null;
     }
 
+    public boolean deleteRoom(Long roomId) {
+        Optional<Room> roomOptional = roomRepository.findById(roomId);
+        if(roomOptional.isPresent())
+        {
+            Room room = roomOptional.get();
+            roomRepository.delete(room);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public boolean deleteUserInRoom(Long roomId, Long memberId)
+    {
+        Optional<Room> roomOptional = roomRepository.findById(roomId);
+        if(roomOptional.isPresent())
+        {
+            HashMap<Long, MemberHashMapDto> memberHashMap = getMemberHashMap(roomId);
+            if(memberHashMap.containsKey(memberId))
+            {
+                Long roomMemberId = memberHashMap.get(memberId).getRoomMemberId();
+                Optional<RoomMember> roomMemberOptional = roomMemberRepository.findById(roomMemberId);
+                RoomMember roomMember = roomMemberOptional.get();
+                roomMemberRepository.delete(roomMember);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
@@ -124,4 +150,34 @@ public class RoomService {
         //에러 터지는거 아직 미구현
         return null;
     }
+
+    public HashMap<Long, MemberHashMapDto> getMemberHashMap(Long roomId) {
+        Optional<Room> roomOptional = roomRepository.findById(roomId);
+
+        if(roomOptional.isPresent())
+        {
+            Room room = roomOptional.get();
+            List<RoomMember> roomMemberList = room.getRoomMembers();
+            HashMap<Long, MemberHashMapDto> memberList = new HashMap<>();
+            for (int i = 0; i < roomMemberList.size(); i++) {
+                Long roomMemberId = roomMemberList.get(i).getId();
+                Long memberId = roomMemberList.get(i).getMember().getId();
+                String email = roomMemberList.get(i).getMember().getEmail();
+                String name = roomMemberList.get(i).getMember().getName();
+                String profileImageURL = roomMemberList.get(i).getMember().getProfileImageURL();
+                MemberHashMapDto responseDto = MemberHashMapDto.builder()
+                        .roomMemberId(roomMemberId)
+                        .memberId(memberId)
+                        .email(email)
+                        .name(name)
+                        .profileImageURL(profileImageURL)
+                        .build();
+                memberList.put(memberId,responseDto);
+            }
+            return memberList;
+        }
+        //에러 터지는거 아직 미구현
+        return null;
+    }
+
 }

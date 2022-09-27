@@ -19,9 +19,9 @@ public class RoomController {
     }
 
     @DeleteMapping("/rooms/{roomId}")
-    public void deleteRoom(@RequestParam Long roomId)
+    public boolean deleteRoom(@PathVariable Long roomId)
     {
-
+        return roomService.deleteRoom(roomId);
     }
 
     @PostMapping("/rooms/join")
@@ -33,7 +33,12 @@ public class RoomController {
     @GetMapping("/rooms/{roomId}")
     public RoomResponseDto getRoomInfo(@PathVariable Long roomId)
     {
-
         return roomService.getRoomResponseDto(roomId);
+    }
+
+    @DeleteMapping("/rooms/users/{roomId}/{memberId}")
+    public boolean deleteUserInRoom(@PathVariable Long roomId,@PathVariable Long memberId)
+    {
+        return roomService.deleteUserInRoom(roomId,memberId);
     }
 }
