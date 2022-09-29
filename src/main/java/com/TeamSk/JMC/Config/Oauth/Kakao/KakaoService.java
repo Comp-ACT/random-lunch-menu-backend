@@ -111,7 +111,6 @@ public class KakaoService {
                 nickname = jsonObject.get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
                 profileImageURL = jsonObject.get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("thumbnail_image_url").getAsString();
             }
-
             System.out.println("id : " + id);
             System.out.println("email : " + email);
             System.out.println("nickname = " + nickname);
