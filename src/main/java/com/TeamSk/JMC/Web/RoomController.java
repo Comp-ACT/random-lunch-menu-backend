@@ -40,5 +40,6 @@ public class RoomController {
     public boolean deleteUserInRoom(@PathVariable Long roomId,@PathVariable Long memberId)
     {
         return roomService.deleteUserInRoom(roomId,memberId);
+
     }
 }

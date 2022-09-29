@@ -8,6 +8,7 @@ import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
+
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 
 @RequiredArgsConstructor
 @Service
@@ -124,6 +126,7 @@ public class RoomService {
         return false;
     }
 
+
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
@@ -179,5 +182,6 @@ public class RoomService {
         //에러 터지는거 아직 미구현
         return null;
     }
+
 
 }
