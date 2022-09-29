@@ -1,6 +1,8 @@
 package com.TeamSk.JMC.Domain.Voting;
 
 import com.TeamSk.JMC.Domain.Restaurant.Restaurant;
+import com.TeamSk.JMC.Domain.Room.Room;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +25,12 @@ public class Voting
     private Long userId;
 
     private boolean agreeFlag;
+
+    @Builder
+    public Voting(Long id, Restaurant restaurant, Long userId, boolean agreeFlag) {
+        this.id = id;
+        this.restaurant = restaurant;
+        this.userId = userId;
+        this.agreeFlag = agreeFlag;
+    }
 }

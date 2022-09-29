@@ -3,6 +3,7 @@ package com.TeamSk.JMC.Web.Dto.roomDto;
 import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
+import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantMakingDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
