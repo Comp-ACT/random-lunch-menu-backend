@@ -2,15 +2,11 @@ package com.TeamSk.JMC.Domain.RecentRestaurant;
 
 
 import com.TeamSk.JMC.Domain.Room.Room;
-import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -18,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class RecentRestaurant {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "RECENT_RESTAURANT_ID")
     private Long id;
 
