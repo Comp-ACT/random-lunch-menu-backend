@@ -124,6 +124,7 @@ public class KakaoService {
 
             loginService.login(member);
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
