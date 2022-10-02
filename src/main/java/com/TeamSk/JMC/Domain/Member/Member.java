@@ -14,7 +14,7 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
     private Long id;
 
@@ -28,8 +28,7 @@ public class Member {
     private List<RoomMember> roomUsers;
 
     @Builder
-    public Member(String name, String email, String profileImageURL)
-    {
+    public Member(String name, String email, String profileImageURL) {
         this.name = name;
         this.email = email;
         this.profileImageURL = profileImageURL;

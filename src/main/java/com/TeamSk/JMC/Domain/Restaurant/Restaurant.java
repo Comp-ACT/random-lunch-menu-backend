@@ -1,7 +1,6 @@
 package com.TeamSk.JMC.Domain.Restaurant;
 
 import com.TeamSk.JMC.Domain.Room.Room;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "RESTAURANT_ID")
     private Long id;
 

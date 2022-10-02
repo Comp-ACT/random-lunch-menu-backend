@@ -8,7 +8,6 @@ import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
-
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
@@ -17,8 +16,10 @@ import com.TeamSk.JMC.Web.Dto.roomDto.RoomResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,8 +29,7 @@ public class RoomService {
 
     private final RoomMemberRepository roomMemberRepository;
 
-    public Long save(RoomMakingDto roomMakingDto)
-    {
+    public Long save(RoomMakingDto roomMakingDto) {
         return roomRepository.save(roomMakingDto.toEntity()).getId();
     }
 
@@ -38,23 +38,22 @@ public class RoomService {
         Long memberId = dto.getMemberId();
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if(roomOptional.isPresent() && memberOptional.isPresent())
-        {
+        if (roomOptional.isPresent() && memberOptional.isPresent()) {
             RoomMember build = RoomMember.builder()
                     .member(memberOptional.get())
                     .room(roomOptional.get())
                     .build();
-            System.out.println("roomMember id : "+build.getId());
+            System.out.println("roomMember id : " + build.getId());
             roomMemberRepository.save(build);
             return true;
         }
 
         return false;
     }
+
     public RoomResponseDto getRoomResponseDto(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if(roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             Room room = roomOptional.get();
             String name = room.getName();
             Long leaderId = room.getLeaderId();
@@ -76,8 +75,7 @@ public class RoomService {
     public List<RestaurantResponseDto> getRestaurantList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
-        if(roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             Room room = roomOptional.get();
             List<Restaurant> restaurantsList = room.getRestaurants();
             List<RestaurantResponseDto> restaurantList = new ArrayList<>();
@@ -98,24 +96,19 @@ public class RoomService {
 
     public boolean deleteRoom(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if(roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             Room room = roomOptional.get();
             roomRepository.delete(room);
             return true;
-        }
-        else
+        } else
             return false;
     }
 
-    public boolean deleteUserInRoom(Long roomId, Long memberId)
-    {
+    public boolean deleteUserInRoom(Long roomId, Long memberId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if(roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             HashMap<Long, MemberHashMapDto> memberHashMap = getMemberHashMap(roomId);
-            if(memberHashMap.containsKey(memberId))
-            {
+            if (memberHashMap.containsKey(memberId)) {
                 Long roomMemberId = memberHashMap.get(memberId).getRoomMemberId();
                 Optional<RoomMember> roomMemberOptional = roomMemberRepository.findById(roomMemberId);
                 RoomMember roomMember = roomMemberOptional.get();
@@ -130,8 +123,7 @@ public class RoomService {
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
-        if(roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             Room room = roomOptional.get();
             List<RoomMember> roomMemberList = room.getRoomMembers();
             List<MemberResponseDto> memberList = new ArrayList<>();
@@ -157,8 +149,7 @@ public class RoomService {
     public HashMap<Long, MemberHashMapDto> getMemberHashMap(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
-        if(roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             Room room = roomOptional.get();
             List<RoomMember> roomMemberList = room.getRoomMembers();
             HashMap<Long, MemberHashMapDto> memberList = new HashMap<>();
@@ -175,7 +166,7 @@ public class RoomService {
                         .name(name)
                         .profileImageURL(profileImageURL)
                         .build();
-                memberList.put(memberId,responseDto);
+                memberList.put(memberId, responseDto);
             }
             return memberList;
         }
