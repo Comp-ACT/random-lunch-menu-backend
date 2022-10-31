@@ -1,8 +1,10 @@
 package com.TeamSk.JMC.Domain.Restaurant;
 
 import com.TeamSk.JMC.Domain.Room.Room;
+
 import com.TeamSk.JMC.Domain.Voting.Voting;
 import lombok.Builder;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +17,7 @@ import java.util.List;
 public class Restaurant {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "RESTAURANT_ID")
     private Long id;
 
