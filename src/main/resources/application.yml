@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/JMC?useSSL=false&allowPublicKeyRetrieval=true
+    username: sejoon
+    password: compact20
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        
+server:
+  address: localhost
+  port: 8080
+
+
+
+
+
+
+
+
