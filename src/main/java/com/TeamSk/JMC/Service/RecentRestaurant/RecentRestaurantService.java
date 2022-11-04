@@ -21,7 +21,7 @@ public class RecentRestaurantService {
 
     private final RoomRepository roomRepository;
     private final RecentRestaurantRepository recentRestaurantRepository;
-
+    private final int maxRecentNum = 5;
 
     public Long save(RecentRestaurantMakingDto makingDto) {
         Optional<Room> roomOptional = roomRepository.findById(makingDto.getRoomId());
@@ -43,7 +43,7 @@ public class RecentRestaurantService {
             List<RecentRestaurant> recentRestaurants = room.getRecentRestaurants();
             Collections.sort(recentRestaurants);
             List<RecentRestaurantResponseDto> recentList = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < recentRestaurants.size() && i < maxRecentNum; i++) {
                 RecentRestaurantResponseDto build = RecentRestaurantResponseDto.builder()
                         .restaurantName(recentRestaurants.get(i).getRestaurantName())
                         .votingDate(recentRestaurants.get(i).getVotingDate())
