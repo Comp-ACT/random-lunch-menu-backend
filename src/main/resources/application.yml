@@ -12,7 +12,9 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-        
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
 server:
   address: localhost
   port: 8080
