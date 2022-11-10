@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value="/kakao")
+@RequestMapping(value = "/kakao")
 public class KakaoController {
     private final KakaoService kakaoService;
+
     @ResponseBody
     @GetMapping("/login")
     public void kakaoCallback(@RequestParam String code) {

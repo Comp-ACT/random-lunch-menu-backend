@@ -7,6 +7,10 @@ import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
+import com.TeamSk.JMC.Exception.MemberNotFoundException;
+import com.TeamSk.JMC.Exception.RoomMemberBothNotFoundException;
+import com.TeamSk.JMC.Exception.RoomNotFoundException;
+import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
@@ -14,22 +18,40 @@ import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomMakingDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RoomService {
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
 
     private final RoomMemberRepository roomMemberRepository;
+    private Optional<Member> memberOptional;
 
     public Long save(RoomMakingDto roomMakingDto) {
+        StringJoiner result = new StringJoiner(", ");
+        boolean flag = false;
+        if (roomMakingDto.getName().equals("")) {
+            result.add("name");
+            flag = true;
+        }
+        if (roomMakingDto.getPassword().equals("")) {
+            result.add("password");
+            flag = true;
+        }
+        if (roomMakingDto.getLeaderId() == null) {
+            result.add("leaderId");
+            flag = true;
+        }
+        if (flag) {
+            log.error("[" + result + "]는(은) 필수값 입니다.");
+            throw new RoomRequestParamRequiredException("Parameter 필수 값 누락 ::[" + result + "]는(은) 필수값 입니다.");
+        }
         return roomRepository.save(roomMakingDto.toEntity()).getId();
     }
 
@@ -38,59 +60,69 @@ public class RoomService {
         Long memberId = dto.getMemberId();
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (roomOptional.isPresent() && memberOptional.isPresent()) {
-            RoomMember build = RoomMember.builder()
-                    .member(memberOptional.get())
-                    .room(roomOptional.get())
-                    .build();
-            roomMemberRepository.save(build);
-            return true;
+        if (!roomOptional.isPresent() && !memberOptional.isPresent()) {
+            log.error("RoomMemberBothNotFoundException : roomID(" + roomId + "), memberID(" + memberId + ")에 대한 room과 member가 없습니다.");
+            throw new RoomMemberBothNotFoundException();
+        }
+        if (!roomOptional.isPresent()) {
+            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
+            throw new RoomNotFoundException();
+        }
+        if (!memberOptional.isPresent()) {
+            log.error("MemberNotFoundException : memberID(" + memberId + ")에 대한 member가 없습니다.");
+            throw new MemberNotFoundException();
         }
 
-        return false;
+        RoomMember build = RoomMember.builder()
+                .member(memberOptional.get())
+                .room(roomOptional.get())
+                .build();
+        roomMemberRepository.save(build);
+        return true;
+
     }
 
     public RoomResponseDto getRoomResponseDto(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (roomOptional.isPresent()) {
-            Room room = roomOptional.get();
-            String name = room.getName();
-            Long leaderId = room.getLeaderId();
-            String password = room.getPassword();
-            List<RestaurantResponseDto> restaurantList = getRestaurantList(roomId);
-            List<MemberResponseDto> memberList = getMemberList(roomId);
-            return RoomResponseDto.builder()
-                    .name(name)
-                    .leaderId(leaderId)
-                    .password(password)
-                    .restaurantList(restaurantList)
-                    .memberList(memberList)
-                    .build();
+        if (!roomOptional.isPresent()) {
+            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
+            throw new RoomNotFoundException();
         }
-        //에러 터지는거 아직 미구현
-        return null;
+        Room room = roomOptional.get();
+        String name = room.getName();
+        Long leaderId = room.getLeaderId();
+        String password = room.getPassword();
+        List<RestaurantResponseDto> restaurantList = getRestaurantList(roomId);
+        List<MemberResponseDto> memberList = getMemberList(roomId);
+        return RoomResponseDto.builder()
+                .name(name)
+                .leaderId(leaderId)
+                .password(password)
+                .restaurantList(restaurantList)
+                .memberList(memberList)
+                .build();
     }
 
     public List<RestaurantResponseDto> getRestaurantList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
-        if (roomOptional.isPresent()) {
-            Room room = roomOptional.get();
-            List<Restaurant> restaurantsList = room.getRestaurants();
-            List<RestaurantResponseDto> restaurantList = new ArrayList<>();
-            for (int i = 0; i < restaurantsList.size(); i++) {
-                Long id = restaurantsList.get(i).getId();
-                String name = restaurantsList.get(i).getName();
-                RestaurantResponseDto build = RestaurantResponseDto.builder()
-                        .id(id)
-                        .name(name)
-                        .build();
-                restaurantList.add(build);
-            }
-            return restaurantList;
+        if (!roomOptional.isPresent()) {
+            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
+            throw new RoomNotFoundException();
         }
-        //에러 터지는거 아직 미구현
-        return null;
+        Room room = roomOptional.get();
+        List<Restaurant> restaurantsList = room.getRestaurants();
+        List<RestaurantResponseDto> restaurantList = new ArrayList<>();
+        for (int i = 0; i < restaurantsList.size(); i++) {
+            Long id = restaurantsList.get(i).getId();
+            String name = restaurantsList.get(i).getName();
+            RestaurantResponseDto build = RestaurantResponseDto.builder()
+                    .id(id)
+                    .name(name)
+                    .build();
+            restaurantList.add(build);
+        }
+        return restaurantList;
     }
 
     public boolean deleteRoom(Long roomId) {
@@ -172,6 +204,4 @@ public class RoomService {
         //에러 터지는거 아직 미구현
         return null;
     }
-
-
 }

@@ -1,10 +1,13 @@
 package com.TeamSk.JMC.Web;
 
+import com.TeamSk.JMC.Exception.ErrorResponse;
+import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Service.Rooms.RoomService;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomMakingDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,27 +22,36 @@ public class RoomController {
     }
 
     @DeleteMapping("/rooms/{roomId}")
-    public boolean deleteRoom(@PathVariable Long roomId)
-    {
+    public boolean deleteRoom(@PathVariable Long roomId) {
         return roomService.deleteRoom(roomId);
     }
 
     @PostMapping("/rooms/join")
-    public boolean joinRoom(@RequestBody RoomJoinDto roomJoinDto)
-    {
+    public boolean joinRoom(@RequestBody RoomJoinDto roomJoinDto) {
         return roomService.addMember(roomJoinDto);
     }
 
     @GetMapping("/rooms/{roomId}")
-    public RoomResponseDto getRoomInfo(@PathVariable Long roomId)
-    {
+    public RoomResponseDto getRoomInfo(@PathVariable Long roomId) {
         return roomService.getRoomResponseDto(roomId);
     }
 
     @DeleteMapping("/rooms/users/{roomId}/{memberId}")
-    public boolean deleteUserInRoom(@PathVariable Long roomId,@PathVariable Long memberId)
-    {
-        return roomService.deleteUserInRoom(roomId,memberId);
+    public boolean deleteUserInRoom(@PathVariable Long roomId, @PathVariable Long memberId) {
+        return roomService.deleteUserInRoom(roomId, memberId);
 
+    }
+
+    @ExceptionHandler(RoomRequestParamRequiredException.class)
+    public ResponseEntity<ErrorResponse> roomRequestParamRequiredExceptionHandler(RoomRequestParamRequiredException e) {
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(
+                        new ErrorResponse(
+                                e.getHttpStatus().value(),
+                                e.getHttpStatus().getReasonPhrase(),
+                                e.getMessage()
+                        )
+                );
     }
 }
