@@ -4,7 +4,7 @@ import com.TeamSk.JMC.Exception.ErrorResponse;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Service.Rooms.RoomService;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
-import com.TeamSk.JMC.Web.Dto.roomDto.RoomMakingDto;
+import com.TeamSk.JMC.Web.Dto.roomDto.RoomRequestDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping("/rooms")
-    public Long makingRoom(@RequestBody RoomMakingDto roomMakingDto) {
-        return roomService.save(roomMakingDto);
+    public Long makingRoom(@RequestBody RoomRequestDto roomRequestDto) {
+        return roomService.save(roomRequestDto);
     }
 
     @DeleteMapping("/rooms/{roomId}")
@@ -34,6 +34,11 @@ public class RoomController {
     @GetMapping("/rooms/{roomId}")
     public RoomResponseDto getRoomInfo(@PathVariable Long roomId) {
         return roomService.getRoomResponseDto(roomId);
+    }
+
+    @PutMapping("/rooms/{roomId}")
+    public boolean updateRoomInfo(@PathVariable Long roomId, @RequestBody RoomRequestDto roomRequestDto) {
+        return roomService.updateRoomInfo(roomId, roomRequestDto);
     }
 
     @DeleteMapping("/rooms/users/{roomId}/{memberId}")

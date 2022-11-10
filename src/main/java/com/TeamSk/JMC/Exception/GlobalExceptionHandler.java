@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
                         new ErrorResponse(
                                 e.getHttpStatus().value(),
                                 e.getHttpStatus().getReasonPhrase(),
-                                "해당 room이 존재하지 않습니다"
+                                e.getMessage()
                         )
                 );
     }
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
                         new ErrorResponse(
                                 e.getHttpStatus().value(),
                                 e.getHttpStatus().getReasonPhrase(),
-                                "해당 member가 존재하지 않습니다."
+                                e.getMessage()
                         )
                 );
     }
@@ -41,7 +41,20 @@ public class GlobalExceptionHandler {
                         new ErrorResponse(
                                 e.getHttpStatus().value(),
                                 e.getHttpStatus().getReasonPhrase(),
-                                "해당 room과 member가 존재하지 않습니다."
+                                e.getMessage()
+                        )
+                );
+    }
+
+    @ExceptionHandler(AlreadyExistedMemberException.class)
+    protected ResponseEntity<ErrorResponse> handleAlreadyExistedMemberException(AlreadyExistedMemberException e) {
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(
+                        new ErrorResponse(
+                                e.getHttpStatus().value(),
+                                e.getHttpStatus().getReasonPhrase(),
+                                e.getMessage()
                         )
                 );
     }

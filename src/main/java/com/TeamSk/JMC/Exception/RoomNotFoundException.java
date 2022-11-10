@@ -7,6 +7,18 @@ public class RoomNotFoundException extends RuntimeException {
         super();
     }
 
+    public RoomNotFoundException(String message) {
+        super(message);
+    }
+
+    public RoomNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public RoomNotFoundException(Throwable cause) {
+        super(cause);
+    }
+
     public HttpStatus getHttpStatus() {
         return HttpStatus.NOT_FOUND;
     }
