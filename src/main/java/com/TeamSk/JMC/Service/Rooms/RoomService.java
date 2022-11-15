@@ -7,7 +7,9 @@ import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
-import com.TeamSk.JMC.Exception.*;
+import com.TeamSk.JMC.Exception.AlreadyExistedMemberException;
+import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
+import com.TeamSk.JMC.Exception.handler.Handler;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
@@ -27,7 +29,7 @@ import java.util.*;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
-
+    private final Handler handler;
     private final RoomMemberRepository roomMemberRepository;
     private Optional<Member> memberOptional;
 
@@ -58,19 +60,9 @@ public class RoomService {
         Long memberId = dto.getMemberId();
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (!roomOptional.isPresent() && !memberOptional.isPresent()) {
-            log.error("RoomMemberBothNotFoundException : roomID(" + roomId + "), memberID(" + memberId + ")에 대한 room과 member가 없습니다.");
-            throw new RoomMemberBothNotFoundException("RoomMemberBothNotFoundException : roomID(" + roomId + "), memberID(" + memberId + ")에 대한 room과 member가 없습니다.");
-        }
 
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-        }
-        if (!memberOptional.isPresent()) {
-            log.error("MemberNotFoundException : memberID(" + memberId + ")에 대한 member가 없습니다.");
-            throw new MemberNotFoundException("MemberNotFoundException : memberID(" + memberId + ")에 대한 member가 없습니다.");
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
         List<RoomMember> roomMembers = roomOptional.get().getRoomMembers();
         for (int i = 0; i < roomMembers.size(); i++) {
             if (roomMembers.get(i).getMember().getId() == memberId) {
@@ -78,23 +70,18 @@ public class RoomService {
                 throw new AlreadyExistedMemberException();
             }
         }
-
         RoomMember build = RoomMember.builder()
                 .member(memberOptional.get())
                 .room(roomOptional.get())
                 .build();
         roomMemberRepository.save(build);
         return true;
-
     }
 
     public RoomResponseDto getRoomResponseDto(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
 
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-        }
         Room room = roomOptional.get();
         String name = room.getName();
         Long leaderId = room.getLeaderId();
@@ -112,11 +99,7 @@ public class RoomService {
 
     public List<RestaurantResponseDto> getRestaurantList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<Restaurant> restaurantsList = room.getRestaurants();
@@ -135,10 +118,7 @@ public class RoomService {
 
     public boolean deleteRoom(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMembers = room.getRoomMembers();
@@ -171,36 +151,25 @@ public class RoomService {
             throw new RoomRequestParamRequiredException("Parameter 필수 값 누락 ::[" + result + "]는(은) 필수값 입니다.");
         }
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
         Room room = roomOptional.get();
 
         room.setName(roomRequestDto.getName());
         room.setPassword(roomRequestDto.getPassword());
         Long newLeaderId = roomRequestDto.getLeaderId();
         Optional<Member> memberOptional = memberRepository.findById(newLeaderId);
-        if (!memberOptional.isPresent()) {
-            log.error("MemberNotFoundException : memberID(" + newLeaderId + ")에 대한 member가 없습니다.");
-            throw new MemberNotFoundException("MemberNotFoundException : memberID(" + newLeaderId + ")에 대한 member가 없어 leader를 변경할 수 없습니다.");
-        }
+        handler.memberNotFoundExceptionHandler(newLeaderId, memberOptional);
         room.setLeaderId(newLeaderId);
         return true;
     }
 
     public boolean deleteUserInRoom(Long roomId, Long memberId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException();
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
 
         HashMap<Long, MemberHashMapDto> memberHashMap = getMemberHashMap(roomId);
-        if (!memberHashMap.containsKey(memberId)) {
-            log.error("MemberNotFoundException : memberID(" + memberId + ")에 대한 member가 없습니다.");
-            throw new MemberNotFoundException();
-        }
+        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+
         Long roomMemberId = memberHashMap.get(memberId).getRoomMemberId();
         Optional<RoomMember> roomMemberOptional = roomMemberRepository.findById(roomMemberId);
         RoomMember roomMember = roomMemberOptional.get();
@@ -208,13 +177,10 @@ public class RoomService {
         return true;
     }
 
-
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException();
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
         List<MemberResponseDto> memberList = new ArrayList<>();
@@ -232,16 +198,11 @@ public class RoomService {
             memberList.add(responseDto);
         }
         return memberList;
-
-
     }
 
     public HashMap<Long, MemberHashMapDto> getMemberHashMap(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (!roomOptional.isPresent()) {
-            log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
-            throw new RoomNotFoundException();
-        }
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
@@ -262,6 +223,5 @@ public class RoomService {
             memberList.put(memberId, responseDto);
         }
         return memberList;
-
     }
 }
