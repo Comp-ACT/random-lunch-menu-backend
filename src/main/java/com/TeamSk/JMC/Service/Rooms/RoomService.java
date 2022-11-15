@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -82,7 +83,6 @@ public class RoomService {
     public RoomResponseDto getRoomResponseDto(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-
         Room room = roomOptional.get();
         String name = room.getName();
         Long leaderId = room.getLeaderId();
