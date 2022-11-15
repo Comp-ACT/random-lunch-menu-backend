@@ -6,23 +6,22 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class RoomMakingDto {
+public class RoomRequestDto {
 
-    private String name;
+    private final String name;
 
-    private String password;
+    private final String password;
 
-    private Long leaderId;
+    private final Long leaderId;
+
     @Builder
-    public RoomMakingDto(@JsonProperty("name") String name,@JsonProperty("password") String password,@JsonProperty("leaderId") Long leaderId)
-    {
+    public RoomRequestDto(@JsonProperty("name") String name, @JsonProperty("password") String password, @JsonProperty("leaderId") Long leaderId) {
         this.name = name;
         this.password = password;
         this.leaderId = leaderId;
     }
 
-    public Room toEntity()
-    {
+    public Room toEntity() {
         return Room.builder()
                 .name(name)
                 .password(password)

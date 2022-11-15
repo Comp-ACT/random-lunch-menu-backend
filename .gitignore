@@ -33,5 +33,12 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### DataBase ###
+/db/
+
 ### VS Code ###
 .vscode/
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
+src/main/resources/application-oauth.yml
