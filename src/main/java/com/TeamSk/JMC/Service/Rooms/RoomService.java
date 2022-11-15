@@ -10,6 +10,7 @@ import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
 import com.TeamSk.JMC.Exception.AlreadyExistedMemberException;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Exception.handler.Handler;
+
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
@@ -63,6 +64,7 @@ public class RoomService {
 
         handler.roomNotFoundExceptionHandler(roomId, roomOptional);
         handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+
         List<RoomMember> roomMembers = roomOptional.get().getRoomMembers();
         for (int i = 0; i < roomMembers.size(); i++) {
             if (roomMembers.get(i).getMember().getId() == memberId) {
@@ -152,6 +154,7 @@ public class RoomService {
         }
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+
         Room room = roomOptional.get();
 
         room.setName(roomRequestDto.getName());
@@ -159,6 +162,7 @@ public class RoomService {
         Long newLeaderId = roomRequestDto.getLeaderId();
         Optional<Member> memberOptional = memberRepository.findById(newLeaderId);
         handler.memberNotFoundExceptionHandler(newLeaderId, memberOptional);
+
         room.setLeaderId(newLeaderId);
         return true;
     }
@@ -180,7 +184,7 @@ public class RoomService {
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-
+        
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
         List<MemberResponseDto> memberList = new ArrayList<>();
