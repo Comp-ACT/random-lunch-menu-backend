@@ -25,11 +25,9 @@ public class RestaurantService {
     private final VotingRepository votingRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public Long save(RestaurantMakingDto restaurantDto)
-    {
+    public boolean save(RestaurantMakingDto restaurantDto) {
         Optional<Room> roomOptional = roomRepository.findById(restaurantDto.getRoomId());
-        if (roomOptional.isPresent())
-        {
+        if (roomOptional.isPresent()) {
             System.out.println(restaurantDto.getRoomId());
             Restaurant build = Restaurant.builder()
                     .name(restaurantDto.getName())
@@ -37,23 +35,24 @@ public class RestaurantService {
                     .build();
             //RoomResponseDto roomDto = RoomResponseDto.builder().name(room.getName()).password(room.getPassword()).leaderId(room.getLeaderId()).build();
             //restaurantDto.setRoom(room);
-            return restaurantRepository.save(build).getId();
+            restaurantRepository.save(build).getId();
+            return true;
         }
         //에러 처리
-        return restaurantRepository.save(restaurantDto.toEntity()).getId();
+        restaurantRepository.save(restaurantDto.toEntity()).getId();
+        return false;
     }
 
-    public RestaurantResponseDto getRestaurantResponseDto(Long restaurantId)
-    {
+    public RestaurantResponseDto getRestaurantResponseDto(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        if(restaurantOptional.isPresent())
-        {
+        if (restaurantOptional.isPresent()) {
             System.out.println("=======================");
             Restaurant restaurant = restaurantOptional.get();
             String name = restaurant.getName();
             List<VotingResponseDto> votingList = getVotingList(restaurantId);
             System.out.println("=======================");
             return RestaurantResponseDto.builder()
+                    .id(restaurantId)
                     .name(name)
                     .votingList(votingList)
                     .build();
@@ -64,8 +63,7 @@ public class RestaurantService {
     private List<VotingResponseDto> getVotingList(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
 
-        if(restaurantOptional.isPresent())
-        {
+        if (restaurantOptional.isPresent()) {
             Restaurant restaurant = restaurantOptional.get();
             List<Voting> votingList = restaurant.getVoting();
             List<VotingResponseDto> votingDtoList = new ArrayList<>();
@@ -86,10 +84,18 @@ public class RestaurantService {
         return null;
     }
 
-    public void delete(Long restaurantId)
-    {
-        restaurantRepository.deleteById(restaurantId);
+    public boolean delete(Long restaurantId) {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
+
+        if (restaurantOptional.isPresent()) {
+            Restaurant restaurant = restaurantOptional.get();
+            List<Voting> votingList = restaurant.getVoting();
+            for (int i = 0; i < votingList.size(); i++) {
+                votingRepository.deleteById(votingList.get(i).getId());
+            }
+            restaurantRepository.deleteById(restaurantId);
+            return true;
+        }
+        return false;
     }
-
-
 }
