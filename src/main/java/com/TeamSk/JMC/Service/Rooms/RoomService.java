@@ -10,7 +10,6 @@ import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
 import com.TeamSk.JMC.Exception.AlreadyExistedMemberException;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Exception.handler.Handler;
-
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
@@ -184,7 +183,7 @@ public class RoomService {
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-        
+
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
         List<MemberResponseDto> memberList = new ArrayList<>();

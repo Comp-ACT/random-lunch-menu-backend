@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-
 public class MemberService {
 
     private final MemberRepository memberRepository;

@@ -5,9 +5,11 @@ import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Exception.MemberNotFoundException;
 import com.TeamSk.JMC.Exception.RoomNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 @Slf4j
 public class Handler {
     public void memberNotFoundExceptionHandler(Long memberId, Optional<Member> memberOptional) {

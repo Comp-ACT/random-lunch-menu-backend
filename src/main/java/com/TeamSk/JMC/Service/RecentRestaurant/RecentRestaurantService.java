@@ -4,7 +4,7 @@ import com.TeamSk.JMC.Domain.RecentRestaurant.RecentRestaurant;
 import com.TeamSk.JMC.Domain.RecentRestaurant.RecentRestaurantRepository;
 import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
-import com.TeamSk.JMC.Service.Rooms.RoomService;
+import com.TeamSk.JMC.Exception.handler.Handler;
 import com.TeamSk.JMC.Web.Dto.recentRestaurantDto.RecentResponseDto;
 import com.TeamSk.JMC.Web.Dto.recentRestaurantDto.RecentRestaurantMakingDto;
 import com.TeamSk.JMC.Web.Dto.recentRestaurantDto.RecentRestaurantResponseDto;
@@ -22,12 +22,12 @@ public class RecentRestaurantService {
 
     private final RoomRepository roomRepository;
     private final RecentRestaurantRepository recentRestaurantRepository;
-    private final RoomService roomService;
+    private final Handler handler;
     private final int maxRecentNum = 5;
 
     public Long save(RecentRestaurantMakingDto makingDto) {
         Optional<Room> roomOptional = roomRepository.findById(makingDto.getRoomId());
-        roomService.roomNotFoundExceptionHandler(makingDto.getRoomId(), roomOptional);
+        handler.roomNotFoundExceptionHandler(makingDto.getRoomId(), roomOptional);
 
         RecentRestaurant build = RecentRestaurant.builder()
                 .room(roomOptional.get())
@@ -39,7 +39,7 @@ public class RecentRestaurantService {
 
     public RecentResponseDto getRecentList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        roomService.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RecentRestaurant> recentRestaurants = room.getRecentRestaurants();
