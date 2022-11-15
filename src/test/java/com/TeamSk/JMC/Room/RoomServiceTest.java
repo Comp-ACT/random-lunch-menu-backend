@@ -4,8 +4,7 @@ import com.TeamSk.JMC.Domain.Member.Member;
 import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Service.Rooms.RoomService;
-import com.TeamSk.JMC.Web.Dto.roomDto.RoomMakingDto;
-import org.assertj.core.api.Assertions;
+import com.TeamSk.JMC.Web.Dto.roomDto.RoomRequestDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -23,11 +22,11 @@ public class RoomServiceTest {
     private RoomService roomService;
 
     @Test
-    public void Room생성(){
+    public void Room생성() {
 
         //given
-        Member member = new Member("박세준","psj6570@naver.com","asdfasfd");
-        RoomMakingDto roomMakingDto = new RoomMakingDto("점메추방","0000",1L);
+        Member member = new Member("박세준", "psj6570@naver.com", "asdfasfd");
+        RoomRequestDto roomMakingDto = new RoomRequestDto("점메추방", "0000", 1L);
         Room save = roomMakingDto.toEntity();
         BDDMockito.given(roomRepository.save(BDDMockito.any())).willReturn(save);
         //when
