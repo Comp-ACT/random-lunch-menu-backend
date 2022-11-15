@@ -58,9 +58,11 @@ public class RoomService {
         Long memberId = dto.getMemberId();
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Room> roomOptional = roomRepository.findById(roomId);
+
         if (!roomOptional.isPresent() && !memberOptional.isPresent()) {
             log.error("RoomMemberBothNotFoundException : roomID(" + roomId + "), memberID(" + memberId + ")에 대한 room과 member가 없습니다.");
             throw new RoomMemberBothNotFoundException("RoomMemberBothNotFoundException : roomID(" + roomId + "), memberID(" + memberId + ")에 대한 room과 member가 없습니다.");
+
         }
 
         if (!roomOptional.isPresent()) {
