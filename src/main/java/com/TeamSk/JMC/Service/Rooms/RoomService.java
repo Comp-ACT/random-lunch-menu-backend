@@ -43,7 +43,6 @@ public class RoomService {
                     .member(memberOptional.get())
                     .room(roomOptional.get())
                     .build();
-            System.out.println("roomMember id : " + build.getId());
             roomMemberRepository.save(build);
             return true;
         }

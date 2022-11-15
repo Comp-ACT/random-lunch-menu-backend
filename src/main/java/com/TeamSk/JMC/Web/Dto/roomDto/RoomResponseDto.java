@@ -1,34 +1,28 @@
 package com.TeamSk.JMC.Web.Dto.roomDto;
 
 import com.TeamSk.JMC.Domain.Room.Room;
-import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
-import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantMakingDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @Getter
 public class RoomResponseDto {
 
-    private String name;
+    private final String name;
 
-    private String password;
+    private final String password;
 
-    private Long LeaderId;
+    private final Long LeaderId;
 
-    private List<MemberResponseDto> memberList;
+    private final List<MemberResponseDto> memberList;
 
-    private List<RestaurantResponseDto> restaurantList;
+    private final List<RestaurantResponseDto> restaurantList;
 
     @Builder
-    public RoomResponseDto(@JsonProperty("id")Long id, @JsonProperty("name") String name, @JsonProperty("password") String password, @JsonProperty("leaderId") Long leaderId, @JsonProperty("memberList") List<MemberResponseDto> memberList, @JsonProperty("restaurantList") List<RestaurantResponseDto> restaurantList) {
+    public RoomResponseDto(Long id, String name, String password, Long leaderId, List<MemberResponseDto> memberList, List<RestaurantResponseDto> restaurantList) {
 
         this.name = name;
         this.password = password;
@@ -37,8 +31,7 @@ public class RoomResponseDto {
         this.restaurantList = restaurantList;
     }
 
-    public Room toEntity()
-    {
+    public Room toEntity() {
         return Room.builder()
                 .name(name)
                 .password(password)
