@@ -10,6 +10,7 @@ import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
 import com.TeamSk.JMC.Exception.AlreadyExistedMemberException;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Exception.handler.Handler;
+import com.TeamSk.JMC.Service.Restaurant.RestaurantService;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
@@ -32,7 +33,7 @@ public class RoomService {
     private final MemberRepository memberRepository;
     private final Handler handler;
     private final RoomMemberRepository roomMemberRepository;
-    private Optional<Member> memberOptional;
+    private final RestaurantService restaurantService;
 
     public Long save(RoomRequestDto roomRequestDto) {
         StringJoiner result = new StringJoiner(", ");
@@ -111,6 +112,7 @@ public class RoomService {
             RestaurantResponseDto build = RestaurantResponseDto.builder()
                     .id(id)
                     .name(name)
+                    .votingList(restaurantService.getVotingList(id))
                     .build();
             restaurantList.add(build);
         }
@@ -168,9 +170,9 @@ public class RoomService {
 
     public boolean deleteUserInRoom(Long roomId, Long memberId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         HashMap<Long, MemberHashMapDto> memberHashMap = getMemberHashMap(roomId);
+        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
         handler.memberNotFoundExceptionHandler(memberId, memberOptional);
 
         Long roomMemberId = memberHashMap.get(memberId).getRoomMemberId();
