@@ -13,22 +13,19 @@ public class RestaurantController {
 
     @PostMapping("/restaurants")
     @ResponseBody
-    public Long save(@RequestBody RestaurantMakingDto restaurantDto)
-    {
+    public Long save(@RequestBody RestaurantMakingDto restaurantDto) {
         return restaurantService.save(restaurantDto);
     }
 
     @GetMapping("/restaurants/{restaurantId}")
-    public RestaurantResponseDto getRestaurantInfo(@PathVariable Long restaurantId)
-    {
+    public RestaurantResponseDto getRestaurantInfo(@PathVariable Long restaurantId) {
         return restaurantService.getRestaurantResponseDto(restaurantId);
     }
 
     @DeleteMapping("/restaurants/{restaurantId}")
     @ResponseBody
-    public void deleteRestaurant(@PathVariable Long restaurantId)
-    {
-        restaurantService.delete(restaurantId);
+    public boolean deleteRestaurant(@PathVariable Long restaurantId) {
+        return restaurantService.deleteRestaurant(restaurantId);
     }
 
 }

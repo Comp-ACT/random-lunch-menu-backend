@@ -12,14 +12,14 @@ public class VotingMakingDto {
 
     private final Long restaurantId;
 
-    private final Long userId;
+    private final Long memberId;
 
     private final boolean agreeFlag;
 
     @Builder
-    public VotingMakingDto(@JsonProperty("id") Long id, @JsonProperty("restaurantId") Long restaurantId, @JsonProperty("userId") Long userId, @JsonProperty("agreeFlag") Boolean agreeFlag) {
+    public VotingMakingDto(@JsonProperty("restaurantId") Long restaurantId, @JsonProperty("memberId") Long memberId, @JsonProperty("agreeFlag") Boolean agreeFlag) {
         this.restaurantId = restaurantId;
-        this.userId = userId;
+        this.memberId = memberId;
         this.agreeFlag = agreeFlag;
     }
 

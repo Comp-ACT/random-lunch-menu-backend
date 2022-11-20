@@ -1,7 +1,6 @@
 package com.TeamSk.JMC.Domain.Voting;
 
 import com.TeamSk.JMC.Domain.Restaurant.Restaurant;
-import com.TeamSk.JMC.Domain.Room.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,15 +20,15 @@ public class Voting {
     @JoinColumn(name = "RESTAURANT_ID")
     private Restaurant restaurant;
 
-    private Long userId;
+    private Long memberId;
 
     private boolean agreeFlag;
 
     @Builder
-    public Voting(Long id, Restaurant restaurant, Long userId, boolean agreeFlag) {
+    public Voting(Long id, Restaurant restaurant, Long memberId, boolean agreeFlag) {
         this.id = id;
         this.restaurant = restaurant;
-        this.userId = userId;
+        this.memberId = memberId;
         this.agreeFlag = agreeFlag;
     }
 }

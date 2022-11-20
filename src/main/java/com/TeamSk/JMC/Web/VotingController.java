@@ -13,13 +13,13 @@ public class VotingController {
 
     @PostMapping("/votings")
     @ResponseBody
-    public Long save(@RequestBody VotingMakingDto votingDto) {
-        return votingService.save(votingDto);
+    public boolean saveVoting(@RequestBody VotingMakingDto votingDto) {
+        return votingService.saveVoting(votingDto);
     }
 
     @DeleteMapping("/votings/{restaurantId}/{userId}")
     @ResponseBody
-    public void deleteVoting(@PathVariable Long votingId) {
-        votingService.delete(votingId);
+    public boolean deleteVoting(@PathVariable Long restaurantId, @PathVariable Long userId) {
+        return votingService.deleteVoting(restaurantId, userId);
     }
 }

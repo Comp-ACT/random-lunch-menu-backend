@@ -34,7 +34,6 @@ public class RecentRestaurantService {
                 .restaurantName(makingDto.getName())
                 .build();
         return recentRestaurantRepository.save(build).getId();
-
     }
 
     public RecentResponseDto getRecentList(Long roomId) {
@@ -55,6 +54,5 @@ public class RecentRestaurantService {
         return RecentResponseDto.builder()
                 .recentList(recentList)
                 .build();
-
     }
 }
