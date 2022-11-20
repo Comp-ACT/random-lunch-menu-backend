@@ -27,7 +27,7 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final Handler handler;
 
-    public boolean save(RestaurantMakingDto restaurantDto) {
+    public Long save(RestaurantMakingDto restaurantDto) {
         Optional<Room> roomOptional = roomRepository.findById(restaurantDto.getRoomId());
         handler.roomNotFoundExceptionHandler(restaurantDto.getRoomId(), roomOptional);
         System.out.println(restaurantDto.getRoomId());
@@ -35,19 +35,18 @@ public class RestaurantService {
                 .name(restaurantDto.getName())
                 .room(roomOptional.get())
                 .build();
-        restaurantRepository.save(build).getId();
-        return true;
+
+        return restaurantRepository.save(build).getId();
     }
 
     public RestaurantResponseDto getRestaurantResponseDto(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
         handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
         Restaurant restaurant = restaurantOptional.get();
-        String name = restaurant.getName();
         List<VotingResponseDto> votingList = getVotingList(restaurantId);
         return RestaurantResponseDto.builder()
                 .id(restaurantId)
-                .name(name)
+                .name(restaurant.getName())
                 .votingList(votingList)
                 .build();
     }
@@ -74,7 +73,7 @@ public class RestaurantService {
 
     }
 
-    public boolean delete(Long restaurantId) {
+    public boolean deleteRestaurant(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
         handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
 

@@ -13,7 +13,7 @@ public class RestaurantController {
 
     @PostMapping("/restaurants")
     @ResponseBody
-    public boolean save(@RequestBody RestaurantMakingDto restaurantDto) {
+    public Long save(@RequestBody RestaurantMakingDto restaurantDto) {
         return restaurantService.save(restaurantDto);
     }
 
@@ -25,7 +25,7 @@ public class RestaurantController {
     @DeleteMapping("/restaurants/{restaurantId}")
     @ResponseBody
     public boolean deleteRestaurant(@PathVariable Long restaurantId) {
-        return restaurantService.delete(restaurantId);
+        return restaurantService.deleteRestaurant(restaurantId);
     }
 
 }

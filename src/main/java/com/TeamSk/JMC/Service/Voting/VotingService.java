@@ -32,13 +32,7 @@ public class VotingService {
         handler.memberNotFoundExceptionHandler(memberId, memberOptional);
 
         Restaurant restaurant = restaurantOptional.get();
-        List<Voting> votingList = restaurant.getVoting();
-        for (int i = 0; i < votingList.size(); i++) {
-            if (votingDto.getMemberId().equals(votingList.get(i).getMemberId())) {
-                votingRepository.deleteById(votingList.get(i).getId());
-            }
-        }
-        System.out.println(votingDto.getMemberId());
+        deleteExistedVoting(votingDto, restaurant);
         Voting build = Voting.builder()
                 .restaurant(restaurantOptional.get())
                 .memberId(votingDto.getMemberId())
@@ -46,6 +40,15 @@ public class VotingService {
                 .build();
         votingRepository.save(build).getId();
         return true;
+    }
+
+    private void deleteExistedVoting(VotingMakingDto votingDto, Restaurant restaurant) {
+        List<Voting> votingList = restaurant.getVoting();
+        for (int i = 0; i < votingList.size(); i++) {
+            if (votingDto.getMemberId().equals(votingList.get(i).getMemberId())) {
+                votingRepository.deleteById(votingList.get(i).getId());
+            }
+        }
     }
 
     public boolean deleteVoting(Long restaurantId, Long userId) {
