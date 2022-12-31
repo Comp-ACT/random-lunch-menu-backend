@@ -2,20 +2,20 @@ package com.TeamSk.JMC.Exception;
 
 import org.springframework.http.HttpStatus;
 
-public class RoomNotFoundException extends RuntimeException {
-    public RoomNotFoundException() {
+public class NotFoundException extends RuntimeException {
+    public NotFoundException() {
         super();
     }
 
-    public RoomNotFoundException(String message) {
+    public NotFoundException(String message) {
         super(message);
     }
 
-    public RoomNotFoundException(String message, Throwable cause) {
+    public NotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public RoomNotFoundException(Throwable cause) {
+    public NotFoundException(Throwable cause) {
         super(cause);
     }
 

@@ -6,7 +6,7 @@ import com.TeamSk.JMC.Domain.Restaurant.Restaurant;
 import com.TeamSk.JMC.Domain.Restaurant.RestaurantRepository;
 import com.TeamSk.JMC.Domain.Voting.Voting;
 import com.TeamSk.JMC.Domain.Voting.VotingRepository;
-import com.TeamSk.JMC.Exception.MemberNotFoundException;
+import com.TeamSk.JMC.Exception.NotFoundException;
 import com.TeamSk.JMC.Exception.handler.Handler;
 import com.TeamSk.JMC.Web.Dto.VotingDto.VotingMakingDto;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class VotingService {
             }
         }
         if (!flag)
-            throw new MemberNotFoundException("votingList에 해당 member(" + listUserId + ")가 없습니다.");
+            throw new NotFoundException("votingList에 해당 member(" + listUserId + ")가 없습니다.");
         votingRepository.deleteById(votingId);
         return true;
     }

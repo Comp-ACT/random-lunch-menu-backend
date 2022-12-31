@@ -7,7 +7,7 @@ import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
-import com.TeamSk.JMC.Exception.AlreadyExistedMemberException;
+import com.TeamSk.JMC.Exception.NotFoundException;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Exception.handler.Handler;
 import com.TeamSk.JMC.Service.Restaurant.RestaurantService;
@@ -70,7 +70,7 @@ public class RoomService {
         for (int i = 0; i < roomMembers.size(); i++) {
             if (roomMembers.get(i).getMember().getId() == memberId) {
                 log.error("AlreadyExistedMemberException : 이미 memberID(" + memberId + ")에 대한 member가 방에 존재합니다.");
-                throw new AlreadyExistedMemberException();
+                throw new NotFoundException();
             }
         }
         RoomMember build = RoomMember.builder()
