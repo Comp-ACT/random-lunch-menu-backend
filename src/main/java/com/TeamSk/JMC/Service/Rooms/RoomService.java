@@ -3,16 +3,18 @@ package com.TeamSk.JMC.Service.Rooms;
 import com.TeamSk.JMC.Domain.Member.Member;
 import com.TeamSk.JMC.Domain.Member.MemberRepository;
 import com.TeamSk.JMC.Domain.Restaurant.Restaurant;
+import com.TeamSk.JMC.Domain.Restaurant.RestaurantRepository;
 import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
+import com.TeamSk.JMC.Domain.Voting.Voting;
 import com.TeamSk.JMC.Exception.NotFoundException;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Exception.handler.Handler;
-import com.TeamSk.JMC.Service.Restaurant.RestaurantService;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
+import com.TeamSk.JMC.Web.Dto.VotingDto.VotingResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomRequestDto;
@@ -33,7 +35,7 @@ public class RoomService {
     private final MemberRepository memberRepository;
     private final Handler handler;
     private final RoomMemberRepository roomMemberRepository;
-    private final RestaurantService restaurantService;
+    private final RestaurantRepository restaurantRepository;
 
     public Long save(RoomRequestDto roomRequestDto) {
         StringJoiner result = new StringJoiner(", ");
@@ -112,7 +114,7 @@ public class RoomService {
             RestaurantResponseDto build = RestaurantResponseDto.builder()
                     .id(id)
                     .name(name)
-                    .votingList(restaurantService.getVotingList(id))
+                    .votingList(getVotingList(id))
                     .build();
             restaurantList.add(build);
         }
@@ -228,5 +230,27 @@ public class RoomService {
             memberList.put(memberId, responseDto);
         }
         return memberList;
+    }
+
+    public List<VotingResponseDto> getVotingList(Long restaurantId) {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
+        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
+
+        Restaurant restaurant = restaurantOptional.get();
+        List<Voting> votingList = restaurant.getVoting();
+        List<VotingResponseDto> votingDtoList = new ArrayList<>();
+        for (int i = 0; i < votingList.size(); i++) {
+            Long id = votingList.get(i).getId();
+            Long userId = votingList.get(i).getMemberId();
+            Boolean agreeFlag = votingList.get(i).isAgreeFlag();
+            VotingResponseDto build = VotingResponseDto.builder()
+                    .id(id)
+                    .userId(userId)
+                    .agreeFlag(agreeFlag)
+                    .build();
+            votingDtoList.add(build);
+        }
+        return votingDtoList;
+
     }
 }
