@@ -28,8 +28,8 @@ public class VotingService {
         Long memberId = votingDto.getMemberId();
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
         Optional<Member> memberOptional = memberRepository.findById(memberId);
-        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
-        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
+        handler.handleMemberNotFoundException(memberId, memberOptional);
 
         Restaurant restaurant = restaurantOptional.get();
         deleteExistedVoting(votingDto, restaurant);
@@ -53,7 +53,7 @@ public class VotingService {
 
     public boolean deleteVoting(Long restaurantId, Long userId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
         Restaurant restaurant = restaurantOptional.get();
         List<Voting> votingList = restaurant.getVoting();
         boolean flag = false;

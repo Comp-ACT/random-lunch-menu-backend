@@ -12,21 +12,21 @@ import java.util.Optional;
 @Component
 @Slf4j
 public class Handler {
-    public void memberNotFoundExceptionHandler(Long memberId, Optional<Member> memberOptional) {
+    public void handleMemberNotFoundException(Long memberId, Optional<Member> memberOptional) {
         if (!memberOptional.isPresent()) {
             log.error("MemberNotFoundException : memberID(" + memberId + ")에 대한 member가 없습니다.");
             throw new NotFoundException("MemberNotFoundException : memberID(" + memberId + ")에 대한 member가 없습니다.");
         }
     }
 
-    public void roomNotFoundExceptionHandler(Long roomId, Optional<Room> roomOptional) {
+    public void handleRoomNotFoundException(Long roomId, Optional<Room> roomOptional) {
         if (!roomOptional.isPresent()) {
             log.error("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
             throw new NotFoundException("RoomNotFoundException : roomID(" + roomId + ")에 대한 room이 없습니다.");
         }
     }
 
-    public void restaurantNotFoundExceptionHandler(Long restaurantId, Optional<Restaurant> restaurantOptional) {
+    public void handleRestaurantNotFoundException(Long restaurantId, Optional<Restaurant> restaurantOptional) {
         if (!restaurantOptional.isPresent()) {
             log.error("RoomNotFoundException : restaurantId(" + restaurantId + ")에 대한 restaurant 없습니다.");
             throw new NotFoundException("RestaurantNotFoundException : restaurantId(" + restaurantId + ")에 대한 restaurant 없습니다.");

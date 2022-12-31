@@ -65,8 +65,8 @@ public class RoomService {
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
+        handler.handleMemberNotFoundException(memberId, memberOptional);
 
         List<RoomMember> roomMembers = roomOptional.get().getRoomMembers();
         for (int i = 0; i < roomMembers.size(); i++) {
@@ -85,7 +85,7 @@ public class RoomService {
 
     public RoomResponseDto getRoomResponseDto(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
         Room room = roomOptional.get();
         String name = room.getName();
         Long leaderId = room.getLeaderId();
@@ -103,7 +103,7 @@ public class RoomService {
 
     public List<RestaurantResponseDto> getRestaurantList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<Restaurant> restaurantsList = room.getRestaurants();
@@ -123,7 +123,7 @@ public class RoomService {
 
     public boolean deleteRoom(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMembers = room.getRoomMembers();
@@ -156,7 +156,7 @@ public class RoomService {
             throw new RoomRequestParamRequiredException("Parameter 필수 값 누락 ::[" + result + "]는(은) 필수값 입니다.");
         }
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
 
@@ -164,7 +164,7 @@ public class RoomService {
         room.setPassword(roomRequestDto.getPassword());
         Long newLeaderId = roomRequestDto.getLeaderId();
         Optional<Member> memberOptional = memberRepository.findById(newLeaderId);
-        handler.memberNotFoundExceptionHandler(newLeaderId, memberOptional);
+        handler.handleMemberNotFoundException(newLeaderId, memberOptional);
 
         room.setLeaderId(newLeaderId);
         return true;
@@ -174,8 +174,8 @@ public class RoomService {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         HashMap<Long, MemberHashMapDto> memberHashMap = getMemberHashMap(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
+        handler.handleMemberNotFoundException(memberId, memberOptional);
 
         Long roomMemberId = memberHashMap.get(memberId).getRoomMemberId();
         Optional<RoomMember> roomMemberOptional = roomMemberRepository.findById(roomMemberId);
@@ -186,7 +186,7 @@ public class RoomService {
 
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
@@ -209,7 +209,7 @@ public class RoomService {
 
     public HashMap<Long, MemberHashMapDto> getMemberHashMap(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
@@ -234,7 +234,7 @@ public class RoomService {
 
     public List<VotingResponseDto> getVotingList(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
 
         Restaurant restaurant = restaurantOptional.get();
         List<Voting> votingList = restaurant.getVoting();

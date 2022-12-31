@@ -18,7 +18,7 @@ public class MemberService {
 
     public MemberDto findById(Long memberId) {
         Optional<Member> memberOptional = memberRepository.findById(memberId);
-        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+        handler.handleMemberNotFoundException(memberId, memberOptional);
         return new MemberDto(memberOptional.get());
     }
 }

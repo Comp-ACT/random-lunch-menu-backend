@@ -27,7 +27,7 @@ public class RecentRestaurantService {
 
     public Long save(RecentRestaurantMakingDto makingDto) {
         Optional<Room> roomOptional = roomRepository.findById(makingDto.getRoomId());
-        handler.roomNotFoundExceptionHandler(makingDto.getRoomId(), roomOptional);
+        handler.handleRoomNotFoundException(makingDto.getRoomId(), roomOptional);
 
         RecentRestaurant build = RecentRestaurant.builder()
                 .room(roomOptional.get())
@@ -38,7 +38,7 @@ public class RecentRestaurantService {
 
     public RecentResponseDto getRecentList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RecentRestaurant> recentRestaurants = room.getRecentRestaurants();

@@ -29,7 +29,7 @@ public class RestaurantService {
 
     public Long save(RestaurantMakingDto restaurantDto) {
         Optional<Room> roomOptional = roomRepository.findById(restaurantDto.getRoomId());
-        handler.roomNotFoundExceptionHandler(restaurantDto.getRoomId(), roomOptional);
+        handler.handleRoomNotFoundException(restaurantDto.getRoomId(), roomOptional);
         System.out.println(restaurantDto.getRoomId());
         Restaurant build = Restaurant.builder()
                 .name(restaurantDto.getName())
@@ -41,7 +41,7 @@ public class RestaurantService {
 
     public RestaurantResponseDto getRestaurantResponseDto(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
         Restaurant restaurant = restaurantOptional.get();
         List<VotingResponseDto> votingList = getVotingList(restaurantId);
         return RestaurantResponseDto.builder()
@@ -53,7 +53,7 @@ public class RestaurantService {
 
     public List<VotingResponseDto> getVotingList(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
 
         Restaurant restaurant = restaurantOptional.get();
         List<Voting> votingList = restaurant.getVoting();
@@ -75,7 +75,7 @@ public class RestaurantService {
 
     public boolean deleteRestaurant(Long restaurantId) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        handler.restaurantNotFoundExceptionHandler(restaurantId, restaurantOptional);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
 
         Restaurant restaurant = restaurantOptional.get();
         List<Voting> votingList = restaurant.getVoting();
