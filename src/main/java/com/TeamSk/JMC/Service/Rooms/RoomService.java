@@ -3,15 +3,18 @@ package com.TeamSk.JMC.Service.Rooms;
 import com.TeamSk.JMC.Domain.Member.Member;
 import com.TeamSk.JMC.Domain.Member.MemberRepository;
 import com.TeamSk.JMC.Domain.Restaurant.Restaurant;
+import com.TeamSk.JMC.Domain.Restaurant.RestaurantRepository;
 import com.TeamSk.JMC.Domain.Room.Room;
 import com.TeamSk.JMC.Domain.Room.RoomRepository;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMember;
 import com.TeamSk.JMC.Domain.RoomMember.RoomMemberRepository;
-import com.TeamSk.JMC.Exception.AlreadyExistedMemberException;
+import com.TeamSk.JMC.Domain.Voting.Voting;
+import com.TeamSk.JMC.Exception.NotFoundException;
 import com.TeamSk.JMC.Exception.RoomRequestParamRequiredException;
 import com.TeamSk.JMC.Exception.handler.Handler;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberHashMapDto;
 import com.TeamSk.JMC.Web.Dto.MemberDto.MemberResponseDto;
+import com.TeamSk.JMC.Web.Dto.VotingDto.VotingResponseDto;
 import com.TeamSk.JMC.Web.Dto.restaurantDto.RestaurantResponseDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomJoinDto;
 import com.TeamSk.JMC.Web.Dto.roomDto.RoomRequestDto;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -31,7 +35,7 @@ public class RoomService {
     private final MemberRepository memberRepository;
     private final Handler handler;
     private final RoomMemberRepository roomMemberRepository;
-    private Optional<Member> memberOptional;
+    private final RestaurantRepository restaurantRepository;
 
     public Long save(RoomRequestDto roomRequestDto) {
         StringJoiner result = new StringJoiner(", ");
@@ -61,14 +65,14 @@ public class RoomService {
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Room> roomOptional = roomRepository.findById(roomId);
 
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
+        handler.handleMemberNotFoundException(memberId, memberOptional);
 
         List<RoomMember> roomMembers = roomOptional.get().getRoomMembers();
         for (int i = 0; i < roomMembers.size(); i++) {
             if (roomMembers.get(i).getMember().getId() == memberId) {
                 log.error("AlreadyExistedMemberException : 이미 memberID(" + memberId + ")에 대한 member가 방에 존재합니다.");
-                throw new AlreadyExistedMemberException();
+                throw new NotFoundException();
             }
         }
         RoomMember build = RoomMember.builder()
@@ -81,8 +85,7 @@ public class RoomService {
 
     public RoomResponseDto getRoomResponseDto(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-
+        handler.handleRoomNotFoundException(roomId, roomOptional);
         Room room = roomOptional.get();
         String name = room.getName();
         Long leaderId = room.getLeaderId();
@@ -100,7 +103,7 @@ public class RoomService {
 
     public List<RestaurantResponseDto> getRestaurantList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<Restaurant> restaurantsList = room.getRestaurants();
@@ -111,6 +114,7 @@ public class RoomService {
             RestaurantResponseDto build = RestaurantResponseDto.builder()
                     .id(id)
                     .name(name)
+                    .votingList(getVotingList(id))
                     .build();
             restaurantList.add(build);
         }
@@ -119,7 +123,7 @@ public class RoomService {
 
     public boolean deleteRoom(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMembers = room.getRoomMembers();
@@ -152,7 +156,7 @@ public class RoomService {
             throw new RoomRequestParamRequiredException("Parameter 필수 값 누락 ::[" + result + "]는(은) 필수값 입니다.");
         }
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
 
@@ -160,7 +164,7 @@ public class RoomService {
         room.setPassword(roomRequestDto.getPassword());
         Long newLeaderId = roomRequestDto.getLeaderId();
         Optional<Member> memberOptional = memberRepository.findById(newLeaderId);
-        handler.memberNotFoundExceptionHandler(newLeaderId, memberOptional);
+        handler.handleMemberNotFoundException(newLeaderId, memberOptional);
 
         room.setLeaderId(newLeaderId);
         return true;
@@ -168,10 +172,10 @@ public class RoomService {
 
     public boolean deleteUserInRoom(Long roomId, Long memberId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
-
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
         HashMap<Long, MemberHashMapDto> memberHashMap = getMemberHashMap(roomId);
-        handler.memberNotFoundExceptionHandler(memberId, memberOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
+        handler.handleMemberNotFoundException(memberId, memberOptional);
 
         Long roomMemberId = memberHashMap.get(memberId).getRoomMemberId();
         Optional<RoomMember> roomMemberOptional = roomMemberRepository.findById(roomMemberId);
@@ -182,7 +186,7 @@ public class RoomService {
 
     public List<MemberResponseDto> getMemberList(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
@@ -205,7 +209,7 @@ public class RoomService {
 
     public HashMap<Long, MemberHashMapDto> getMemberHashMap(Long roomId) {
         Optional<Room> roomOptional = roomRepository.findById(roomId);
-        handler.roomNotFoundExceptionHandler(roomId, roomOptional);
+        handler.handleRoomNotFoundException(roomId, roomOptional);
 
         Room room = roomOptional.get();
         List<RoomMember> roomMemberList = room.getRoomMembers();
@@ -226,5 +230,27 @@ public class RoomService {
             memberList.put(memberId, responseDto);
         }
         return memberList;
+    }
+
+    public List<VotingResponseDto> getVotingList(Long restaurantId) {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
+        handler.handleRestaurantNotFoundException(restaurantId, restaurantOptional);
+
+        Restaurant restaurant = restaurantOptional.get();
+        List<Voting> votingList = restaurant.getVoting();
+        List<VotingResponseDto> votingDtoList = new ArrayList<>();
+        for (int i = 0; i < votingList.size(); i++) {
+            Long id = votingList.get(i).getId();
+            Long userId = votingList.get(i).getMemberId();
+            Boolean agreeFlag = votingList.get(i).isAgreeFlag();
+            VotingResponseDto build = VotingResponseDto.builder()
+                    .id(id)
+                    .userId(userId)
+                    .agreeFlag(agreeFlag)
+                    .build();
+            votingDtoList.add(build);
+        }
+        return votingDtoList;
+
     }
 }
