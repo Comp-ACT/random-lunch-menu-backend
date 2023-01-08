@@ -5,8 +5,7 @@ plugins {
 }
 
 group = 'com.TeamSk'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {
@@ -29,9 +28,12 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-webmvc-core', version: '1.6.9'
-    implementation 'mysql:mysql-connector-java'
+    implementation 'mysql:mysql-connector-java:8.0.15'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+jar {
+    enabled = false
 }

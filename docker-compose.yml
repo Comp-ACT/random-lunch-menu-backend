@@ -1,19 +1,44 @@
 version: "3"
 services:
-  db:
-    image: mariadb:10
+  database:
+    image: mysql:8.0.20
+    container_name: mysql_db
     ports:
-      - 3306:3306
+        - "3307:3306"
     volumes:
-      - ./db/conf.d:/etc/mysql/conf.d
-      - ./db/data:/var/lib/mysql
-      - ./db/initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d # MySQL 설정 파일 위치
     env_file: .env
     environment:
       TZ: Asia/Seoul
+      MYSQL_ROOT_PASSWORD: "tpwns313"
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE : "jmc"
+#      MYSQL_USER : "sejoon"
+#      DB_USER_PASSWORD : "compact20"
+    command:
+      - "mysqld"
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     networks:
       - backend
-    restart: always
+    restart: unless-stopped
+
+  application:
+    container_name: docker-compose-test
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/JMC?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: "sejoon"
+      SPRING_DATASOURCE_PASSWORD: "compact20"
+    depends_on:
+      - database
+    networks:
+      - backend
 
 networks:
   backend:
