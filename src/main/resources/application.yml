@@ -1,28 +1,21 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/JMC?useSSL=false&allowPublicKeyRetrieval=true
-    username: sejoon
-    password: compact20
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:postgresql://jmcfly-db.internal:5432/jmcflydb?user=postgres&password=fnKQVGyPHKzrI3u
+    url: jdbc:postgresql://localhost:5432/jmcdb?user=postgres
+    username: postgres
+    password: compact
+    driver-class-name: org.postgresql.Driver
+
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: create
-server:
-  address: localhost
-  port: 8080
-
-
-
-
-
-
-
-
+#server:
+#  address: localhost
+#  port: 8080
