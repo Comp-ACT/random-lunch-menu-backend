@@ -16,6 +16,11 @@ spring:
         use_sql_comments: true
     hibernate:
       ddl-auto: create
+  profiles:
+    include: oauth
 #server:
 #  address: localhost
 #  port: 8080
+app:
+  jwtSecret: sVlwEyVBaqwefV7zq5rqr5blYcfPQye08f7MGVA9XkHa
+  jwtExpirationInMs: 30 * 60 * 1000L

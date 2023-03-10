@@ -93,10 +93,11 @@ public class KakaoService {
         return urlConnection;
     }
 
-    public void createKakaoUser(String accessToken) {
+    public Member createKakaoUser(String accessToken) {
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         Member member = fetchKakaoUserInfo(accessToken, reqURL);
         loginService.login(member);
+        return member;
     }
 
     private Member fetchKakaoUserInfo(String accessToken, String reqURL) {

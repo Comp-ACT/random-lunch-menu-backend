@@ -1,54 +1,40 @@
-# fly.toml file generated for jmc on 2023-01-03T22:06:12+09:00
+# fly.toml file generated for jmcfly on 2023-01-19T23:15:17+09:00
 
-app = "jmc"
+app = "jmcfly"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[mounts]
-  source="mysqldata"
-  destination="/data"
+[build]
+dockerfile = "Dockerfile"
 
 [env]
-  DB = "mysql"
-  MYSQL_DATABASE = "jmc"
-  MYSQL_USER = "sejoon"
-  DB_USER_PASSWORD="compact20"
-
-[build]
-  image = "mysql:8"
 
 [experimental]
-  cmd = [
-    "--default-authentication-plugin",
-    "mysql_native_password",
-    "--datadir",
-    "/data/mysql",
-#    "/var/lib/mysql/thedata"
-  ]
+auto_rollback = true
 
 [[services]]
-  http_checks = []
-  internal_port = 8080
-  processes = ["app"]
-  protocol = "tcp"
-  script_checks = []
-  [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
-    type = "connections"
+http_checks = []
+internal_port = 8080
+processes = ["app"]
+protocol = "tcp"
+script_checks = []
+[services.concurrency]
+hard_limit = 25
+soft_limit = 20
+type = "connections"
 
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = 80
+[[services.ports]]
+force_https = true
+handlers = ["http"]
+port = 80
 
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
+[[services.ports]]
+handlers = ["tls", "http"]
+port = 443
 
-  [[services.tcp_checks]]
-    grace_period = "1s"
-    interval = "15s"
-    restart_limit = 0
-    timeout = "2s"
+[[services.tcp_checks]]
+grace_period = "1s"
+interval = "15s"
+restart_limit = 0
+timeout = "2s"

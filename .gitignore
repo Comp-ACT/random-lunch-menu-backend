@@ -35,7 +35,10 @@ out/
 
 ### DataBase ###
 /db/
-
+fly.toml
+Dockerfile
+docker-compose.yml
+/resources/application.yml
 ### VS Code ###
 .vscode/
 .DS_Store
